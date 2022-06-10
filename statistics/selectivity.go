@@ -16,6 +16,7 @@ package statistics
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"math"
@@ -216,13 +217,24 @@ func fallbackToInternalCardinalityEstimator(ctx sessionctx.Context, expr express
 }
 
 func wrapCNFExprsAsRequest(exprs expression.CNFExprs) ([]byte, error) {
-	// YOUR CODE HERE: wrap these CNF expressions into a raw request
-	return nil, errors.New("not support")
+	// TODO: YOUR CODE HERE: wrap these CNF expressions into a raw request
+	b, err := json.Marshal(exprs)
+	if err != nil {
+		panic(err)
+	}
+	return b, nil
+	// return nil, errors.New("not support")
 }
 
 func parseResponseAsSelectivity(respData []byte) (float64, error) {
-	// YOUR CODE HERE: wrap response data into a selectivity
-	return 0, errors.New("not support")
+	// TODO: YOUR CODE HERE: wrap response data into a selectivity
+	var dat map[string]interface{}
+	if err := json.Unmarshal(respData, &dat); err != nil {
+		panic(err)
+	}
+	sel := dat["sel"].(float64)
+	return sel, nil
+	// return 0, errors.New("not support")
 }
 
 func callExternalCardinalityEstimator(ctx sessionctx.Context, exprs expression.CNFExprs) (selectivity float64, fallback bool, err error) {

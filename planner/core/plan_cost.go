@@ -76,8 +76,14 @@ func wrapPhysicalPlanAsRequest(p PhysicalPlan) ([]byte, error) {
 }
 
 func parseResponseAsCost(respData []byte) (float64, error) {
-	// YOUR CODE HERE: wrap response data into a cost value
-	return 0, errors.New("not support now")
+	// TODO: YOUR CODE HERE: wrap response data into a cost value
+	var dat map[string]interface{}
+	if err := json.Unmarshal(respData, &dat); err != nil {
+		panic(err)
+	}
+	cost := dat["cost"].(float64)
+	return cost, nil
+	// return 0, errors.New("not support now")
 }
 
 // for simplicity, we only considered HashAgg, HashJoin, Sort, Selection, Projection,
